@@ -1908,17 +1908,20 @@ void MarkdownEditor::togglePrefixForBlocks(const QString& prefix)
 
     while (block != end)
     {
-        cursor.setPosition(block.position());
-        if (block.text().indexOf(prefix) != 0)
+        if (block.length() > 1)
         {
-            cursor.insertText(prefix);
-        }
-        else
-        {
-            cursor.movePosition(QTextCursor::StartOfLine);
-            for (int i = 0; i < prefix.length(); i++)
+            cursor.setPosition(block.position());
+            if (block.text().indexOf(prefix) != 0)
             {
-                cursor.deleteChar();
+                cursor.insertText(prefix);
+            }
+            else
+            {
+                cursor.movePosition(QTextCursor::StartOfLine);
+                for (int i = 0; i < prefix.length(); i++)
+                {
+                    cursor.deleteChar();
+                }
             }
         }
         block = block.next();
