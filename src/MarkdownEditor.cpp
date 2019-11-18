@@ -962,17 +962,17 @@ void MarkdownEditor::insertComment()
 
 void MarkdownEditor::createBulletListWithAsteriskMarker()
 {
-    insertPrefixForBlocks("* ");
+    togglePrefixForBlocks("* ");
 }
 
 void MarkdownEditor::createBulletListWithMinusMarker()
 {
-    insertPrefixForBlocks("- ");
+    togglePrefixForBlocks("- ");
 }
 
 void MarkdownEditor::createBulletListWithPlusMarker()
 {
-    insertPrefixForBlocks("+ ");
+    togglePrefixForBlocks("+ ");
 }
 
 void MarkdownEditor::createNumberedListWithPeriodMarker()
@@ -987,12 +987,12 @@ void MarkdownEditor::createNumberedListWithParenthesisMarker()
 
 void MarkdownEditor::createTaskList()
 {
-    insertPrefixForBlocks("- [ ] ");
+    togglePrefixForBlocks("- [ ] ");
 }
 
 void MarkdownEditor::createBlockquote()
 {
-    insertPrefixForBlocks("> ");
+    togglePrefixForBlocks("> ");
 }
 
 // Algorithm lifted from ReText.
@@ -1278,6 +1278,8 @@ void MarkdownEditor::unindentText()
     cursor.endEditBlock();
 }
 
+
+// FIXME: this doesn't work with Arabic (RTL) languages
 bool MarkdownEditor::toggleTaskComplete()
 {
     QTextCursor cursor = textCursor();
@@ -1883,8 +1885,9 @@ bool MarkdownEditor::handleBackspaceKey()
     return false;
 }
 
+
 // Algorithm lifted from ReText.
-void MarkdownEditor::insertPrefixForBlocks(const QString& prefix)
+void MarkdownEditor::togglePrefixForBlocks(const QString& prefix)
 {
     QTextCursor cursor = this->textCursor();
     QTextBlock block;
@@ -1906,7 +1909,18 @@ void MarkdownEditor::insertPrefixForBlocks(const QString& prefix)
     while (block != end)
     {
         cursor.setPosition(block.position());
-        cursor.insertText(prefix);
+        if (block.text().indexOf(prefix) != 0)
+        {
+            cursor.insertText(prefix);
+        }
+        else
+        {
+            cursor.movePosition(QTextCursor::StartOfLine);
+            for (int i = 0; i < prefix.length(); i++)
+            {
+                cursor.deleteChar();
+            }
+        }
         block = block.next();
     }
 
