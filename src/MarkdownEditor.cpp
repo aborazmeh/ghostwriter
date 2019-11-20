@@ -1517,6 +1517,7 @@ void MarkdownEditor::focusText()
         beforeFadedSelection.cursor = this->textCursor();
         afterFadedSelection.format.setForeground(fadeColor);
         afterFadedSelection.cursor = this->textCursor();
+        QTextBlock block = this->textCursor().block();
 
         bool canFadePrevious = false;
 
@@ -1584,7 +1585,11 @@ void MarkdownEditor::focusText()
                 }
                 else
                 {
-                    beforeFadedSelection.cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, currentPos - lastSentencePos);
+                    beforeFadedSelection.cursor.movePosition(
+                                block.text().isRightToLeft() ? QTextCursor::Right : QTextCursor::Left,
+                                QTextCursor::MoveAnchor,
+                                currentPos - lastSentencePos
+                                );
                 }
 
                 beforeFadedSelection.cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
@@ -1596,7 +1601,11 @@ void MarkdownEditor::focusText()
                 }
                 else
                 {
-                    afterFadedSelection.cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, nextSentencePos - currentPos);
+                    afterFadedSelection.cursor.movePosition(
+                                block.text().isRightToLeft() ? QTextCursor::Left : QTextCursor::Right,
+                                QTextCursor::MoveAnchor,
+                                nextSentencePos - currentPos
+                                );
                 }
 
                 afterFadedSelection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
