@@ -93,6 +93,7 @@ MarkdownEditor::MarkdownEditor
     installEventFilter(this);
     viewport()->installEventFilter(this);
     hemingwayModeEnabled = false;
+    selectricModeEnabled = false;
     focusMode = FocusModeDisabled;
     insertSpacesForTabs = false;
     setTabulationWidth(4);
@@ -367,6 +368,11 @@ void MarkdownEditor::setHemingWayModeEnabled(bool enabled)
     hemingwayModeEnabled = enabled;
 }
 
+bool MarkdownEditor::getSelectricModeEnabled() const
+{
+    return selectricModeEnabled;
+}
+
 void MarkdownEditor::setSelectricModeEnabled(bool enabled)
 {
     selectricModeEnabled = enabled;
@@ -632,6 +638,10 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
     int key = e->key();
 
     QTextCursor cursor(this->textCursor());
+    int currentTextLength = this->textDocument->characterCount();
+    QString selectricMoveWav = ":/resources/wav/move.wav";
+    QString selectricTypeWav = ":/resources/wav/type.wav";
+    QString selectricPingWav = ":/resources/wav/ping.wav";
 
     switch (key)
     {
@@ -658,6 +668,12 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
             {
                 QPlainTextEdit::keyPressEvent(e);
             }
+
+            if (getSelectricModeEnabled())
+            {
+                QSound::play(selectricPingWav);
+            }
+
             break;
         case Qt::Key_Delete:
             if (!hemingwayModeEnabled)
@@ -704,6 +720,18 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
                 QPlainTextEdit::keyPressEvent(e);
             }
             break;
+    }
+
+    if (getSelectricModeEnabled())
+    {
+        if (currentTextLength < this->textDocument->characterCount())
+        {
+            QSound::play(selectricTypeWav);
+        }
+        else if (key == Qt::Key_PageUp || key == Qt::Key_PageDown || key == Qt::Key_Home || key == Qt::Key_End || key == Qt::Key_Down || key == Qt::Key_Up || key == Qt::Key_Left || key == Qt::Key_Right)
+        {
+            QSound::play(selectricMoveWav);
+        }
     }
 }
 

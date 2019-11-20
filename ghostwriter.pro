@@ -28,7 +28,7 @@ isEqual(QT_MAJOR_VERSION, 5) : lessThan(QT_MINOR_VERSION, 8) {
 
 TEMPLATE = app
 
-QT += widgets concurrent svg webenginewidgets webengine webchannel
+QT += widgets concurrent svg webenginewidgets webengine webchannel multimedia
 
 CONFIG -= debug
 CONFIG += warn_on

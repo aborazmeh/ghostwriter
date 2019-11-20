@@ -30,6 +30,7 @@
 #include <QTextCursor>
 #include <QListWidget>
 #include <QRegularExpression>
+#include <QSound>
 
 #include "MarkdownEditorTypes.h"
 #include "MarkdownStyles.h"
@@ -97,6 +98,11 @@ class MarkdownEditor : public QPlainTextEdit
          * Sets whether Hemingway mode is enabled.
          */
         void setHemingWayModeEnabled(bool enabled);
+
+        /**
+         * Gets whether Selectric mode is enabled.
+         */
+        bool getSelectricModeEnabled() const;
 
         /**
          * Sets whether Selectric mode is enabled.

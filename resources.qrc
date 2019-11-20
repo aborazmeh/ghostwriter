@@ -30,5 +30,8 @@
         <file>resources/gw.js</file>
         <file>resources/images/selectric-dark.svg</file>
         <file>resources/images/selectric-light.svg</file>
+        <file>resources/wav/move.wav</file>
+        <file>resources/wav/ping.wav</file>
+        <file>resources/wav/type.wav</file>
     </qresource>
 </RCC>
