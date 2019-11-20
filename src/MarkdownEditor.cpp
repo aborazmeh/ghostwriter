@@ -2176,11 +2176,43 @@ void MarkdownEditor::toggleFormattingMarkup(const QString& markup1, const QStrin
         // Insert markup twice (for opening and closing around the cursor),
         // and then move the cursor to be between the pair.
         //
+        int position = cursor.position();
+
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::QTextCursor::KeepAnchor, markup1.length());
+        bool existedBefore = markup1 == cursor.selectedText();
+
+        cursor.setPosition(position);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::QTextCursor::KeepAnchor, markup2.length());
+        bool existedAfter = markup2 == cursor.selectedText();
+        cursor.clearSelection();
+
         cursor.beginEditBlock();
-        cursor.insertText(markup1);
-        cursor.insertText(markup2);
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, markup2.length());
+        if(existedBefore && existedAfter)
+        {
+
+            cursor.setPosition(position - markup1.length());
+            for (int i = 0; i < markup1.length(); i++)
+            {
+                cursor.deleteChar();
+            }
+
+            cursor.setPosition(position - markup1.length());
+            for (int i = 0; i < markup2.length(); i++)
+            {
+                cursor.deleteChar();
+            }
+        }
+        else
+        {
+            cursor.setPosition(position);
+            cursor.insertText(markup1);
+            cursor.insertText(markup2);
+        }
+
+
         cursor.endEditBlock();
+        cursor.setPosition(position);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, markup2.length());
         this->setTextCursor(cursor);
     }
 }
