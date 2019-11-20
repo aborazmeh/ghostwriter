@@ -1616,8 +1616,8 @@ void MainWindow::buildMenuBar()
     formatMenu->addAction(tr("&- Bullet List"), editor, SLOT(createBulletListWithMinusMarker()), QKeySequence("Ctrl+Shift+-"));
     formatMenu->addAction(tr("&+ Bullet List"), editor, SLOT(createBulletListWithPlusMarker()), QKeySequence("Ctrl+Shift+="));
     formatMenu->addSeparator();
-    formatMenu->addAction(tr("1&. Numbered List"), editor, SLOT(createNumberedListWithPeriodMarker()), QKeySequence("Ctrl+1"));
-    formatMenu->addAction(tr("1&) Numbered List"), editor, SLOT(createNumberedListWithParenthesisMarker()), QKeySequence("Ctrl+0"));
+    formatMenu->addAction(tr("1&. Numbered List"), editor, SLOT(toggleNumberedListWithPeriodMarker()), QKeySequence("Ctrl+1"));
+    formatMenu->addAction(tr("1&) Numbered List"), editor, SLOT(toggleNumberedListWithParenthesisMarker()), QKeySequence("Ctrl+0"));
     formatMenu->addSeparator();
     formatMenu->addAction(tr("&Task List"), editor, SLOT(createTaskList()), QKeySequence("Ctrl+T"));
     formatMenu->addAction(tr("Toggle Task(s) &Complete"), editor, SLOT(toggleTaskComplete()), QKeySequence("Ctrl+D"));

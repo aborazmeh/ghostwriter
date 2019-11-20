@@ -264,13 +264,13 @@ class MarkdownEditor : public QPlainTextEdit
          * Formats current line or selected lines as a numbered
          * list with the period (.) marker.
          */
-        void createNumberedListWithPeriodMarker();
+        void toggleNumberedListWithPeriodMarker();
 
         /**
          * Formats current line or selected lines as a numbered
          * list with the parenthesis (')') marker.
          */
-        void createNumberedListWithParenthesisMarker();
+        void toggleNumberedListWithParenthesisMarker();
 
         /**
          * Formats current line or selected lines as a task list.
@@ -462,7 +462,7 @@ class MarkdownEditor : public QPlainTextEdit
         void handleCarriageReturn();
         bool handleBackspaceKey();
         void insertPrefixForBlocks(const QString& prefix);
-        void createNumberedList(const QChar marker);
+        void toggleNumberedList(const QChar marker);
         bool insertPairedCharacters(const QChar firstChar);
         bool handleEndPairCharacterTyped(const QChar ch);
         bool handleWhitespaceInEmptyMatch(const QChar whitespace);

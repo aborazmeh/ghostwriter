@@ -83,10 +83,10 @@ MarkdownEditor::MarkdownEditor
 
     this->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    
+
     // Make sure QPlainTextEdit does not draw a cursor.  (We'll paint it manually.)
     setCursorWidth(0);
-    
+
     setCenterOnScroll(true);
     ensureCursorVisible();
     spellCheckEnabled = false;
@@ -160,7 +160,7 @@ MarkdownEditor::MarkdownEditor
     );
 
     textCursorVisible = true;
-    
+
     cursorBlinkTimer = new QTimer(this);
     connect(cursorBlinkTimer, SIGNAL(timeout()), this, SLOT(toggleCursorBlink()));
     cursorBlinkTimer->start(500);
@@ -336,7 +336,7 @@ void MarkdownEditor::paintEvent(QPaintEvent* event)
         //
         QRect r = cursorRect();
         r.setWidth(2);
-        
+
         QPainter painter(viewport());
         painter.fillRect(r, QBrush(cursorColor));
         painter.end();
@@ -417,7 +417,7 @@ void MarkdownEditor::setColorScheme
         codeColor,
         spellingErrorColor
     );
-    
+
     this->cursorColor = linkColor;
 
     blockColor = defaultTextColor;
@@ -975,14 +975,14 @@ void MarkdownEditor::createBulletListWithPlusMarker()
     insertPrefixForBlocks("+ ");
 }
 
-void MarkdownEditor::createNumberedListWithPeriodMarker()
+void MarkdownEditor::toggleNumberedListWithPeriodMarker()
 {
-    createNumberedList('.');
+    toggleNumberedList('.');
 }
 
-void MarkdownEditor::createNumberedListWithParenthesisMarker()
+void MarkdownEditor::toggleNumberedListWithParenthesisMarker()
 {
-    createNumberedList(')');
+    toggleNumberedList(')');
 }
 
 void MarkdownEditor::createTaskList()
@@ -1673,14 +1673,14 @@ void MarkdownEditor::onCursorPositionChanged()
             centerCursor();
         }
     }
-    
+
     // Set the text cursor back to visible and reset the blink timer so that
     // the cursor is always visible whenever it moves to a new position.
     //
     textCursorVisible = true;
     cursorBlinkTimer->stop();
     cursorBlinkTimer->start();
-    
+
     // Update widget to ensure cursor is drawn.
     update();
 
@@ -1922,7 +1922,7 @@ void MarkdownEditor::insertPrefixForBlocks(const QString& prefix)
     cursor.endEditBlock();
 }
 
-void MarkdownEditor::createNumberedList(const QChar marker)
+void MarkdownEditor::toggleNumberedList(const QChar marker)
 {
     QTextCursor cursor = this->textCursor();
     QTextBlock block;
@@ -1945,10 +1945,25 @@ void MarkdownEditor::createNumberedList(const QChar marker)
 
     while (block != end)
     {
-        cursor.setPosition(block.position());
-        cursor.insertText(QString("%1").arg(number) + marker + " ");
+        QString prefix = QString("%1").arg(number) + marker + " ";
+        if (block.length() > 1)
+        {
+            cursor.setPosition(block.position());
+            if (block.text().indexOf(prefix) != 0)
+            {
+                cursor.insertText(prefix);
+            }
+            else
+            {
+                cursor.movePosition(QTextCursor::StartOfLine);
+                for (int i = 0; i < prefix.length(); i++)
+                {
+                    cursor.deleteChar();
+                }
+            }
+            number++;
+         }
         block = block.next();
-        number++;
     }
 
     cursor.endEditBlock();
