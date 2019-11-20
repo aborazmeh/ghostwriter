@@ -929,17 +929,17 @@ void MarkdownEditor::navigateDocument(const int pos)
 
 void MarkdownEditor::bold()
 {
-    insertFormattingMarkup("**");
+    toggleFormattingMarkup("**");
 }
 
 void MarkdownEditor::italic()
 {
-    insertFormattingMarkup("*");
+    toggleFormattingMarkup("*");
 }
 
 void MarkdownEditor::strikethrough()
 {
-    insertFormattingMarkup("~~");
+    toggleFormattingMarkup("~~");
 }
 
 void MarkdownEditor::insertComment()
@@ -2128,22 +2128,55 @@ bool MarkdownEditor::handleWhitespaceInEmptyMatch(const QChar whitespace)
     return false;
 }
 
-void MarkdownEditor::insertFormattingMarkup(const QString& markup)
+void MarkdownEditor::toggleFormattingMarkup(const QString& markup)
 {
     QTextCursor cursor = this->textCursor();
 
     if (cursor.hasSelection())
     {
         int start = cursor.selectionStart();
-        int end = cursor.selectionEnd() + markup.length();
-        QTextCursor c = cursor;
-        c.beginEditBlock();
-        c.setPosition(start);
-        c.insertText(markup);
-        c.setPosition(end);
-        c.insertText(markup);
-        c.endEditBlock();
+        int end = cursor.selectionEnd();
+        int length = cursor.selectedText().length();
+
+        cursor.clearSelection();
+        cursor.setPosition(start);
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::QTextCursor::KeepAnchor, markup.length());
+        bool existedBefore = markup == cursor.selectedText();
+        cursor.setPosition(end);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::QTextCursor::KeepAnchor, markup.length());
+        bool existedAfter = markup == cursor.selectedText();
+
+        if (existedAfter && existedBefore)
+        {
+            cursor.beginEditBlock();
+            cursor.setPosition(start - markup.length());
+            for (int i = 0; i < markup.length(); i++)
+            {
+                cursor.deleteChar();
+            }
+
+            cursor.setPosition(end - markup.length());
+            for (int i = 0; i < markup.length(); i++)
+            {
+                cursor.deleteChar();
+            }
+
+            cursor.endEditBlock();
+            cursor.setPosition(start - markup.length());
+        }
+
+        else
+        {
+            cursor.beginEditBlock();
+            cursor.setPosition(start);
+            cursor.insertText(markup);
+            cursor.setPosition(end + markup.length());
+            cursor.insertText(markup);
+            cursor.endEditBlock();
+            cursor.setPosition(start + markup.length());
+        }
+
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::QTextCursor::KeepAnchor, length);
         this->setTextCursor(cursor);
     }
     else
