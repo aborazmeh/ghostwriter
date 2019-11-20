@@ -80,6 +80,7 @@ class MainWindow : public QMainWindow
         void openPreferencesDialog();
         void toggleHtmlPreview(bool checked);
         void toggleHemingwayMode(bool checked);
+        void toggleSelectricMode(bool checked);
         void toggleFocusMode(bool checked);
         void toggleFullScreen(bool checked);
         void toggleHideMenuBarInFullScreen(bool checked);
@@ -137,6 +138,7 @@ class MainWindow : public QMainWindow
         QPushButton* exportButton;
         QPushButton* copyHtmlButton;
         QPushButton* hemingwayModeButton;
+        QPushButton* selectricModeButton;
         QPushButton* focusModeButton;
         QPushButton* htmlPreviewButton;
         QPushButton* hideOpenHudsButton;

@@ -367,6 +367,11 @@ void MarkdownEditor::setHemingWayModeEnabled(bool enabled)
     hemingwayModeEnabled = enabled;
 }
 
+void MarkdownEditor::setSelectricModeEnabled(bool enabled)
+{
+    selectricModeEnabled = enabled;
+}
+
 FocusMode MarkdownEditor::getFocusMode()
 {
     return focusMode;

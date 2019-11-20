@@ -840,6 +840,18 @@ void MainWindow::toggleHemingwayMode(bool checked)
     }
 }
 
+void MainWindow::toggleSelectricMode(bool checked)
+{
+    if (checked)
+    {
+        editor->setSelectricModeEnabled(true);
+    }
+    else
+    {
+        editor->setSelectricModeEnabled(false);
+    }
+}
+
 void MainWindow::toggleFocusMode(bool checked)
 {
     if (checked)
@@ -1769,6 +1781,13 @@ void MainWindow::buildStatusBar()
     connect(hemingwayModeButton, SIGNAL(toggled(bool)), this, SLOT(toggleHemingwayMode(bool)));
     rightLayout->addWidget(hemingwayModeButton, 0, Qt::AlignRight);
 
+    selectricModeButton = new QPushButton();
+    selectricModeButton->setFocusPolicy(Qt::NoFocus);
+    selectricModeButton->setToolTip(tr("Toggle Selectric mode"));
+    selectricModeButton->setCheckable(true);
+    connect(selectricModeButton, SIGNAL(toggled(bool)), this, SLOT(toggleSelectricMode(bool)));
+    rightLayout->addWidget(selectricModeButton, 0, Qt::AlignRight);
+
     focusModeButton = new QPushButton();
     focusModeButton->setFocusPolicy(Qt::NoFocus);
     focusModeButton->setToolTip(tr("Toggle distraction free mode"));
@@ -1806,6 +1825,7 @@ void MainWindow::buildStatusBar()
     statusBarButtons.append(hideOpenHudsButton);
     statusBarButtons.append(htmlPreviewButton);
     statusBarButtons.append(hemingwayModeButton);
+    statusBarButtons.append(selectricModeButton);
     statusBarButtons.append(focusModeButton);
     statusBarButtons.append(fullScreenButton);
 
@@ -1973,6 +1993,7 @@ void MainWindow::applyTheme()
     QString fullScreenIcon;
     QString focusIcon;
     QString hemingwayIcon;
+    QString selectricIcon;
     QString htmlPreviewIcon;
     QString hideOpenHudsIcon;
     QString copyHtmlIcon;
@@ -1988,6 +2009,7 @@ void MainWindow::applyTheme()
         fullScreenIcon = ":/resources/images/fullscreen-dark.svg";
         focusIcon = ":/resources/images/focus-dark.svg";
         hemingwayIcon = ":/resources/images/hemingway-dark.svg";
+        selectricIcon = ":/resources/images/selectric-dark.svg";
         htmlPreviewIcon = ":/resources/images/html-preview-dark.svg";
         hideOpenHudsIcon = ":/resources/images/hide-huds-dark.svg";
         copyHtmlIcon = ":/resources/images/copy-html-dark.svg";
@@ -2043,6 +2065,7 @@ void MainWindow::applyTheme()
         fullScreenIcon = ":/resources/images/fullscreen-light.svg";
         focusIcon = ":/resources/images/focus-light.svg";
         hemingwayIcon = ":/resources/images/hemingway-light.svg";
+        selectricIcon = ":/resources/images/selectric-light.svg";
         htmlPreviewIcon = ":/resources/images/html-preview-light.svg";
         hideOpenHudsIcon = ":/resources/images/hide-huds-light.svg";
         copyHtmlIcon = ":/resources/images/copy-html-light.svg";
@@ -2242,6 +2265,8 @@ void MainWindow::applyTheme()
     focusModeButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
     hemingwayModeButton->setIcon(QIcon(hemingwayIcon));
     hemingwayModeButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
+    selectricModeButton->setIcon(QIcon(selectricIcon));
+    selectricModeButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
     htmlPreviewButton->setIcon(QIcon(htmlPreviewIcon));
     htmlPreviewButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
     hideOpenHudsButton->setIcon(QIcon(hideOpenHudsIcon));
