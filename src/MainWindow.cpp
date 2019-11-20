@@ -103,6 +103,8 @@ MainWindow::MainWindow(const QString& filePath, QWidget* parent)
 
     appSettings = AppSettings::getInstance();
 
+    this->setLayoutDirection(QLocale(appSettings->getLocale()).textDirection());
+
     outlineWidget = new Outline();
     outlineWidget->setAlternatingRowColors(appSettings->getAlternateHudRowColorsEnabled());
 
