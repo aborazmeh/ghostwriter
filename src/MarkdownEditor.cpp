@@ -2138,9 +2138,9 @@ void MarkdownEditor::toggleFormattingMarkup(const QString& markup1, const QStrin
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::QTextCursor::KeepAnchor, markup2.length());
         bool existedAfter = markup2 == cursor.selectedText();
 
+        cursor.beginEditBlock();
         if (existedAfter && existedBefore)
         {
-            cursor.beginEditBlock();
             cursor.setPosition(start - markup1.length());
             for (int i = 0; i < markup1.length(); i++)
             {
@@ -2152,22 +2152,18 @@ void MarkdownEditor::toggleFormattingMarkup(const QString& markup1, const QStrin
             {
                 cursor.deleteChar();
             }
-
-            cursor.endEditBlock();
             cursor.setPosition(start - markup1.length());
         }
-
         else
         {
-            cursor.beginEditBlock();
             cursor.setPosition(start);
             cursor.insertText(markup1);
             cursor.setPosition(end + markup1.length());
             cursor.insertText(markup2);
-            cursor.endEditBlock();
             cursor.setPosition(start + markup2.length());
         }
 
+        cursor.endEditBlock();
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::QTextCursor::KeepAnchor, length);
         this->setTextCursor(cursor);
     }
