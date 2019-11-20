@@ -461,12 +461,13 @@ class MarkdownEditor : public QPlainTextEdit
 
         void handleCarriageReturn();
         bool handleBackspaceKey();
-        void insertPrefixForBlocks(const QString& prefix);
+        void togglePrefixForBlocks(const QString& prefix);
         void toggleNumberedList(const QChar marker);
         bool insertPairedCharacters(const QChar firstChar);
         bool handleEndPairCharacterTyped(const QChar ch);
         bool handleWhitespaceInEmptyMatch(const QChar whitespace);
-        void insertFormattingMarkup(const QString& markup);
+        void toggleFormattingMarkup(const QString& markup);
+        void toggleFormattingMarkup(const QString& markup1, const QString& markup2);
         QString getPriorIndentation();
         QString getPriorMarkdownBlockItemStart
         (
