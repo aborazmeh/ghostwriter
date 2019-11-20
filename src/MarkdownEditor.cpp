@@ -1333,7 +1333,7 @@ bool MarkdownEditor::toggleTaskComplete()
                 cursor.movePosition(QTextCursor::StartOfBlock);
                 cursor.movePosition
                 (
-                    QTextCursor::Right,
+                    block.text().isRightToLeft() ? QTextCursor::Left : QTextCursor::Right,
                     QTextCursor::MoveAnchor,
                     index
                 );
