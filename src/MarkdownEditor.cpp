@@ -693,6 +693,30 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
             {
                 cutCurrentLine();
             }
+            else
+            {
+                QPlainTextEdit::keyPressEvent(e);
+            }
+        break;
+        case Qt::Key_Up:
+            if (e->modifiers() & Qt::AltModifier)
+            {
+                moveCurrentLine("up");
+            }
+            else
+            {
+                QPlainTextEdit::keyPressEvent(e);
+            }
+        break;
+        case Qt::Key_Down:
+            if (e->modifiers() & Qt::AltModifier)
+            {
+                moveCurrentLine("down");
+            }
+            else
+            {
+                QPlainTextEdit::keyPressEvent(e);
+            }
         break;
         default:
             if (e->text().size() == 1)
@@ -713,7 +737,8 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
 }
 
 // TODO insert a newline on pasting
-void MarkdownEditor::cutCurrentLine() {
+void MarkdownEditor::cutCurrentLine()
+{
     QTextCursor cursor = this->textCursor();
     QClipboard *clipboard = QGuiApplication::clipboard();
     cursor.select(QTextCursor::LineUnderCursor);
@@ -722,6 +747,28 @@ void MarkdownEditor::cutCurrentLine() {
     cursor.removeSelectedText();
 }
 
+void MarkdownEditor::moveCurrentLine(const QString& direction)
+{
+    QTextCursor cursor = this->textCursor();
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    int position = cursor.positionInBlock();
+
+    cutCurrentLine();
+
+    if (direction == "up")
+    {
+        cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
+    }
+    else
+    {
+        cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 1);
+    }
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor, 1);
+    cursor.insertText(clipboard->text());
+    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor, 1);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, position);
+    this->setTextCursor(cursor);
+}
 
 bool MarkdownEditor::eventFilter(QObject* watched, QEvent* event)
 {

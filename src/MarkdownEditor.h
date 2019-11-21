@@ -470,6 +470,7 @@ class MarkdownEditor : public QPlainTextEdit
         void toggleFormattingMarkup(const QString& markup);
         void toggleFormattingMarkup(const QString& markup1, const QString& markup2);
         void cutCurrentLine();
+        void moveCurrentLine(const QString& direction);
         QString getPriorIndentation();
         QString getPriorMarkdownBlockItemStart
         (
