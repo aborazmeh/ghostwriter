@@ -28,9 +28,11 @@
 #include <QLabel>
 #include <QGraphicsColorizeEffect>
 #include <QGraphicsDropShadowEffect>
+#include <QDebug>
 
 #include "MarkdownEditor.h"
 #include "HtmlPreview.h"
+#include "TranslationPanel.h"
 #include "ThemeFactory.h"
 #include "HtmlPreview.h"
 #include "AppSettings.h"
@@ -80,6 +82,7 @@ class MainWindow : public QMainWindow
         void openPreferencesDialog();
         void toggleHtmlPreview(bool checked);
         void toggleHemingwayMode(bool checked);
+        void toggleTranslationMode(bool checked);
         void toggleFocusMode(bool checked);
         void toggleFullScreen(bool checked);
         void toggleHideMenuBarInFullScreen(bool checked);
@@ -137,11 +140,13 @@ class MainWindow : public QMainWindow
         QPushButton* exportButton;
         QPushButton* copyHtmlButton;
         QPushButton* hemingwayModeButton;
+        QPushButton* translationModeButton;
         QPushButton* focusModeButton;
         QPushButton* htmlPreviewButton;
         QPushButton* hideOpenHudsButton;
         FindDialog* findReplaceDialog;
         HtmlPreview* htmlPreview;
+        TranslationPanel* translationPanel;
         QWebEngineView* quickReferenceGuideViewer;
         QAction* htmlPreviewMenuAction;
         QAction* fullScreenMenuAction;

@@ -93,6 +93,7 @@ MarkdownEditor::MarkdownEditor
     installEventFilter(this);
     viewport()->installEventFilter(this);
     hemingwayModeEnabled = false;
+    translationModeEnabled = false;
     focusMode = FocusModeDisabled;
     insertSpacesForTabs = false;
     setTabulationWidth(4);
@@ -366,6 +367,17 @@ void MarkdownEditor::setHemingWayModeEnabled(bool enabled)
 {
     hemingwayModeEnabled = enabled;
 }
+
+bool MarkdownEditor::getTranslationModeEnabled() const
+{
+    return translationModeEnabled;
+}
+
+void MarkdownEditor::setTranslationModeEnabled(bool enabled)
+{
+    translationModeEnabled = enabled;
+}
+
 
 FocusMode MarkdownEditor::getFocusMode()
 {

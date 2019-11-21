@@ -454,9 +454,17 @@ MainWindow::MainWindow(const QString& filePath, QWidget* parent)
 
     htmlPreview->setStyleSheet(appSettings->getCurrentCssFile());
 
+    translationPanel = new TranslationPanel
+        (
+            documentManager->getDocument(),
+            this
+        );
+    connect(editor, SIGNAL(cursorPositionChanged()), translationPanel, SLOT(update()));
+
     splitter = new QSplitter(this);
     splitter->addWidget(editorPane);
     splitter->addWidget(htmlPreview);
+    splitter->addWidget(translationPanel);
     splitter->setStyleSheet("QSplitter:handle { border: 0 }"
         "QSplitter { border: 0; margin: 0; padding: 0 }");
     setCentralWidget(splitter);
@@ -802,6 +810,8 @@ void MainWindow::toggleHtmlPreview(bool checked)
 
     if (checked)
     {
+        toggleTranslationMode(false);
+        splitter->addWidget(translationPanel);
         htmlPreview->show();
         htmlPreview->updatePreview();
 
@@ -826,6 +836,27 @@ void MainWindow::toggleHtmlPreview(bool checked)
 
     htmlPreviewButton->blockSignals(false);
     htmlPreviewMenuAction->blockSignals(false);
+}
+
+void MainWindow::toggleTranslationMode(bool checked)
+{
+    translationModeButton->setChecked(checked);
+
+    if (checked)
+    {
+        toggleHtmlPreview(false);
+        splitter->addWidget(htmlPreview);
+        translationPanel->show();
+        translationPanel->update();
+    }
+    else
+    {
+        translationPanel->hide();
+    }
+
+    adjustEditorWidth(this->width());
+
+    applyStatusBarStyle();
 }
 
 void MainWindow::toggleHemingwayMode(bool checked)
@@ -1189,7 +1220,7 @@ void MainWindow::onHideHudsOnPreviewChanged(bool enabled)
 {
     if (enabled)
     {
-        setOpenHudsVisibility(!htmlPreview->isVisible());
+        setOpenHudsVisibility(!htmlPreview->isVisible() || translationPanel->isVisible());
     }
     else
     {
@@ -1206,7 +1237,7 @@ void MainWindow::onTypingPaused()
 {
     if (appSettings->getHideHudsWhenTypingEnabled())
     {
-        if (!appSettings->getHideHudsOnPreviewEnabled() || !htmlPreview->isVisible())
+        if (!appSettings->getHideHudsOnPreviewEnabled() || !htmlPreview->isVisible() || translationPanel->isVisible())
         {
             setOpenHudsVisibility(true);
         }
@@ -1769,6 +1800,13 @@ void MainWindow::buildStatusBar()
     connect(hemingwayModeButton, SIGNAL(toggled(bool)), this, SLOT(toggleHemingwayMode(bool)));
     rightLayout->addWidget(hemingwayModeButton, 0, Qt::AlignRight);
 
+    translationModeButton = new QPushButton();
+    translationModeButton->setFocusPolicy(Qt::NoFocus);
+    translationModeButton->setToolTip(tr("Toggle Translation mode"));
+    translationModeButton->setCheckable(true);
+    connect(translationModeButton, SIGNAL(toggled(bool)), this, SLOT(toggleTranslationMode(bool)));
+    rightLayout->addWidget(translationModeButton, 0, Qt::AlignRight);
+
     focusModeButton = new QPushButton();
     focusModeButton->setFocusPolicy(Qt::NoFocus);
     focusModeButton->setToolTip(tr("Toggle distraction free mode"));
@@ -1806,6 +1844,7 @@ void MainWindow::buildStatusBar()
     statusBarButtons.append(hideOpenHudsButton);
     statusBarButtons.append(htmlPreviewButton);
     statusBarButtons.append(hemingwayModeButton);
+    statusBarButtons.append(translationModeButton);
     statusBarButtons.append(focusModeButton);
     statusBarButtons.append(fullScreenButton);
 
@@ -1829,7 +1868,7 @@ void MainWindow::adjustEditorWidth(int width)
 {
     int editorWidth = width;
 
-    if (htmlPreview->isVisible())
+    if (htmlPreview->isVisible() || translationPanel->isVisible())
     {
         editorWidth /= 2;
 
@@ -1858,6 +1897,8 @@ void MainWindow::applyStatusBarStyle()
         (EditorAspectStretch == theme.getEditorAspect())
         ||
         htmlPreview->isVisible()
+        ||
+        translationPanel->isVisible()
     )
     {
         border = 1;
@@ -1973,6 +2014,7 @@ void MainWindow::applyTheme()
     QString fullScreenIcon;
     QString focusIcon;
     QString hemingwayIcon;
+    QString translationIcon;
     QString htmlPreviewIcon;
     QString hideOpenHudsIcon;
     QString copyHtmlIcon;
@@ -1988,6 +2030,7 @@ void MainWindow::applyTheme()
         fullScreenIcon = ":/resources/images/fullscreen-dark.svg";
         focusIcon = ":/resources/images/focus-dark.svg";
         hemingwayIcon = ":/resources/images/hemingway-dark.svg";
+        translationIcon = ":/resources/images/translation-dark.svg";
         htmlPreviewIcon = ":/resources/images/html-preview-dark.svg";
         hideOpenHudsIcon = ":/resources/images/hide-huds-dark.svg";
         copyHtmlIcon = ":/resources/images/copy-html-dark.svg";
@@ -2043,6 +2086,7 @@ void MainWindow::applyTheme()
         fullScreenIcon = ":/resources/images/fullscreen-light.svg";
         focusIcon = ":/resources/images/focus-light.svg";
         hemingwayIcon = ":/resources/images/hemingway-light.svg";
+        translationIcon = ":/resources/images/translation-light.svg";
         htmlPreviewIcon = ":/resources/images/html-preview-light.svg";
         hideOpenHudsIcon = ":/resources/images/hide-huds-light.svg";
         copyHtmlIcon = ":/resources/images/copy-html-light.svg";
@@ -2242,6 +2286,8 @@ void MainWindow::applyTheme()
     focusModeButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
     hemingwayModeButton->setIcon(QIcon(hemingwayIcon));
     hemingwayModeButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
+    translationModeButton->setIcon(QIcon(translationIcon));
+    translationModeButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
     htmlPreviewButton->setIcon(QIcon(htmlPreviewIcon));
     htmlPreviewButton->setIconSize(QSize(menuBarFontWidth, menuBarFontWidth));
     hideOpenHudsButton->setIcon(QIcon(hideOpenHudsIcon));

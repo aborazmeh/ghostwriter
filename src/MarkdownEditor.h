@@ -100,6 +100,16 @@ class MarkdownEditor : public QPlainTextEdit
         void setHemingWayModeEnabled(bool enabled);
 
         /**
+         * Gets whether Translation mode is enabled.
+         */
+        bool getTranslationModeEnabled() const;
+
+        /**
+         * Sets whether Hemingway mode is enabled.
+         */
+        void setTranslationModeEnabled(bool enabled);
+
+        /**
          * Gets the current focus mode.
          */
         FocusMode getFocusMode();
@@ -418,6 +428,7 @@ class MarkdownEditor : public QPlainTextEdit
         bool bulletPointCyclingEnabled;
         QList<QAction*> spellingActions;
         bool hemingwayModeEnabled;
+        bool translationModeEnabled;
         FocusMode focusMode;
         QBrush fadeColor;
         QColor blockColor;

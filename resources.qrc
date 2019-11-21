@@ -28,5 +28,7 @@
         <file>resources/quickreferenceguide_ja.html</file>
         <file>resources/quickreferenceguide_ru.html</file>
         <file>resources/gw.js</file>
+        <file>resources/images/translation-dark.svg</file>
+        <file>resources/images/translation-light.svg</file>
     </qresource>
 </RCC>

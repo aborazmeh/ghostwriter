@@ -100,6 +100,7 @@ macx {
 INCLUDEPATH += src src/spelling
 
 HEADERS += src/MainWindow.h \
+    src/TranslationPanel.h \
     src/MarkdownEditor.h \
     src/Token.h \
     src/HtmlPreview.h \
@@ -161,6 +162,7 @@ HEADERS += src/MainWindow.h \
     src/sundown/stack.h
 
 SOURCES += src/AppMain.cpp \
+    src/TranslationPanel.cpp \
     src/MainWindow.cpp \
     src/MarkdownEditor.cpp \
     src/Token.cpp \
