@@ -1914,10 +1914,8 @@ void MarkdownEditor::togglePrefixForBlocks(const QString& prefix)
             else
             {
                 cursor.movePosition(QTextCursor::StartOfLine);
-                for (int i = 0; i < prefix.length(); i++)
-                {
-                    cursor.deleteChar();
-                }
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, prefix.length());
+                cursor.removeSelectedText();
             }
         }
         block = block.next();
@@ -1960,10 +1958,8 @@ void MarkdownEditor::toggleNumberedList(const QChar marker)
             else
             {
                 cursor.movePosition(QTextCursor::StartOfLine);
-                for (int i = 0; i < prefix.length(); i++)
-                {
-                    cursor.deleteChar();
-                }
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, prefix.length());
+                cursor.removeSelectedText();
             }
             number++;
          }
@@ -2159,16 +2155,13 @@ void MarkdownEditor::toggleFormattingMarkup(const QString& markup1, const QStrin
         if (existedAfter && existedBefore)
         {
             cursor.setPosition(start - markup1.length());
-            for (int i = 0; i < markup1.length(); i++)
-            {
-                cursor.deleteChar();
-            }
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, markup1.length());
+            cursor.removeSelectedText();
 
             cursor.setPosition(end - markup2.length());
-            for (int i = 0; i < markup2.length(); i++)
-            {
-                cursor.deleteChar();
-            }
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, markup2.length());
+            cursor.removeSelectedText();
+
             cursor.setPosition(start - markup1.length());
         }
         else
@@ -2204,28 +2197,23 @@ void MarkdownEditor::toggleFormattingMarkup(const QString& markup1, const QStrin
         {
 
             cursor.setPosition(position - markup1.length());
-            for (int i = 0; i < markup1.length(); i++)
-            {
-                cursor.deleteChar();
-            }
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, markup1.length());
+            cursor.removeSelectedText();
 
             cursor.setPosition(position - markup1.length());
-            for (int i = 0; i < markup2.length(); i++)
-            {
-                cursor.deleteChar();
-            }
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, markup1.length());
+            cursor.removeSelectedText();
+            cursor.setPosition(position - markup2.length());
         }
         else
         {
             cursor.setPosition(position);
             cursor.insertText(markup1);
             cursor.insertText(markup2);
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, markup2.length());
         }
 
-
         cursor.endEditBlock();
-        cursor.setPosition(position);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, markup2.length());
         this->setTextCursor(cursor);
     }
 }
