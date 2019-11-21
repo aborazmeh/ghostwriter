@@ -30,6 +30,7 @@
 #include <QTextCursor>
 #include <QListWidget>
 #include <QRegularExpression>
+#include <QClipboard>
 
 #include "MarkdownEditorTypes.h"
 #include "MarkdownStyles.h"
@@ -468,6 +469,7 @@ class MarkdownEditor : public QPlainTextEdit
         bool handleWhitespaceInEmptyMatch(const QChar whitespace);
         void toggleFormattingMarkup(const QString& markup);
         void toggleFormattingMarkup(const QString& markup1, const QString& markup2);
+        void cutCurrentLine();
         QString getPriorIndentation();
         QString getPriorMarkdownBlockItemStart
         (

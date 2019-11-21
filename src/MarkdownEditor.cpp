@@ -659,6 +659,10 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
             {
                 QPlainTextEdit::keyPressEvent(e);
             }
+            if (e->modifiers() & Qt::ShiftModifier && !cursor.hasSelection())
+            {
+                cutCurrentLine();
+            }
             break;
         case Qt::Key_Backspace:
             if (!hemingwayModeEnabled)
@@ -684,6 +688,12 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
                 QPlainTextEdit::keyPressEvent(e);
             }
             break;
+        case Qt::Key_X:
+            if (e->modifiers() & Qt::ControlModifier && !cursor.hasSelection())
+            {
+                cutCurrentLine();
+            }
+        break;
         default:
             if (e->text().size() == 1)
             {
@@ -701,6 +711,17 @@ void MarkdownEditor::keyPressEvent(QKeyEvent* e)
             break;
     }
 }
+
+// TODO insert a newline on pasting
+void MarkdownEditor::cutCurrentLine() {
+    QTextCursor cursor = this->textCursor();
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    cursor.select(QTextCursor::LineUnderCursor);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 1);
+    clipboard->setText(cursor.selectedText());
+    cursor.removeSelectedText();
+}
+
 
 bool MarkdownEditor::eventFilter(QObject* watched, QEvent* event)
 {
