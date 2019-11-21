@@ -252,18 +252,6 @@ QWidget* PreferencesDialog::initializeGeneralTab()
     connect(rememberHistoryCheckBox, SIGNAL(toggled(bool)), appSettings, SLOT(setFileHistoryEnabled(bool)));
     historyGroupLayout->addRow(rememberHistoryCheckBox);
 
-    QGroupBox* selectricGroupBox = new QGroupBox(tr("Selectric"));
-    tabLayout->addWidget(historyGroupBox);
-
-    QFormLayout* selectricGroupLayout = new QFormLayout();
-    selectricGroupBox->setLayout(selectricGroupLayout);
-
-//    QCheckBox* activateSelectricCheckBox = new QCheckBox(tr("Activate Selectric Mode"));
-//    activateSelectricCheckBox->setCheckable(true);
-//    activateSelectricCheckBox->setChecked(appSettings->getSelectricEnabled());
-//    connect(activateSelectricCheckBox, SIGNAL(toggled(bool)), appSettings, SLOT(setSelectricEnabled(bool)));
-//    selectricGroupLayout->addRow(activateSelectricCheckBox);
-
     return tab;
 }
 
